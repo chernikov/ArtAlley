@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "signalr1": {
+      "restored": true,
+      "restoreTime": "2020-11-01T15:04:33.2076863Z"
+    }
+  },
+  "parameters": {
+    "resourceGroup": {
+      "Type": "resourceGroup",
+      "Value": "USS"
+    },
+    "subscriptionId": {
+      "Type": "subscription",
+      "Value": "eaade3b6-cabe-469b-bfa5-4d56276175c2"
+    }
+  }
+}

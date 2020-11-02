@@ -1,0 +1,98 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+
+    <div class="player">
+        <div class="cover">
+            <img src="https://hosseinghanbari.ir/other/music-player/autumn.jpg" alt="">
+        </div>
+        <div class="volume-box">
+            <span class="volume-down"><i class="material-icons">remove</i></span>
+            <input type="range" class="volume-range" step="1" value="80" min="0" max="100"
+                   oninput="music.volume = this.value/100">
+            <span class="volume-up"><i class="material-icons">add</i></span>
+        </div>
+        <div id="state" style="display:none;">
+
+        </div>
+        <div class="music-list">
+            <div class="music-box">
+                <audio class="music-element" id="0">
+                    <source src="/files/01.mp3" type="audio/mp3">
+                </audio>
+                <label>
+                    01
+                </label>
+                <div class="current-time"></div>
+                <span class="play-btn" id="play_0" data-disabled="false" onclick="handlePlay(0)">
+                    <i class="material-icons">play_arrow</i>
+                </span>
+            </div>
+            <div class="music-box">
+                <audio class="music-element" id="1">
+                    <source src="/files/02.mp3" type="audio/mp3">
+                </audio>
+                <label>
+                    02
+                </label>
+                <div class="current-time"></div>
+                <span class="play-btn" id="play_1" onclick="handlePlay(1)">
+                    <i class="material-icons">play_arrow</i>
+                </span>
+            </div>
+            <div class="music-box">
+                <audio class="music-element" id="2">
+                    <source src="/files/03.mp3" type="audio/mp3">
+                </audio>
+                <label>
+                    03
+                </label>
+                <div class="current-time"></div>
+                <span class="play-btn" id="play_2" onclick="handlePlay(2)">
+                    <i class="material-icons">play_arrow</i>
+                </span>
+            </div>
+
+            <div class="music-box">
+                <audio class="music-element" id="3">
+                    <source src="/files/04.mp3" type="audio/mp3">
+                </audio>
+                <label>
+                    04
+                </label>
+                <div class="current-time"></div>
+                <span class="play-btn" id="play_3" onclick="handlePlay(3)">
+                    <i class="material-icons">play_arrow</i>
+                </span>
+            </div>
+
+            <div class="music-box">
+                <audio class="music-element" id="4">
+                    <source src="/files/05.mp3" type="audio/mp3">
+                </audio>
+                <label>
+                    05
+                </label>
+                <div class="current-time"></div>
+                <span class="play-btn" id="play_4" onclick="handlePlay(4)">
+                    <i class="material-icons">play_arrow</i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

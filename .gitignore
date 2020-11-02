@@ -1,0 +1,8 @@
+# Windows image file caches
+Thumbs.db
+thumbs.db
+
+.vs/
+node_modules/
+bin/
+obj/
