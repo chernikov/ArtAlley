@@ -3,232 +3,250 @@
 
 // Write your JavaScript code.
 // player
-var connection = new signalR.HubConnectionBuilder().withUrl("/controlhub").build();
 
-var musicLines = document.getElementsByClassName('music-element');
-var playBtns = document.getElementsByClassName('play-btn');
-var currentTimes = document.getElementsByClassName('current-time');
-var stateBox = document.getElementById("state");
-var player = document.getElementById('player');
-var currentMusic = null;
-var currentId = null;
-var uuid = uuidv4();
+function Index() {
+    var _this = this;
 
-var state = {};
-var aliveTimestamp = 0;
-var aliveTimeout = 0;
-var loaded = 0;
+    this.connection = new signalR.HubConnectionBuilder().withUrl("/controlhub").build();
+    this.uuid;
 
-var audioFiles = [
-    "/files/01.mp3",
-    "/files/02.mp3",
-    "/files/03.mp3",
-    "/files/04.mp3",
-    "/files/05.mp3",
-    "/files/06.mp3",
-    "/files/07.mp3",
-    "/files/08.mp3",
-    "/files/09.mp3"
-];
+    this.audioFiles = [
+        {
+            id: 1,
+            name: "01",
+            path: "/files/01.mp3",
+            time: 0
+        },
+        {
+            id: 2,
+            name: "02",
+            path: "/files/02.mp3",
+            time: 0
+        }, {
+            id: 3,
+            name: "03",
+            path: "/files/03.mp3",
+            time: 0
+        }
+    ];
+    var currentMusic = null;
+    var currentId = null;
 
-function preloadAudio(url) {
-    var audio = new Audio();
-    // once this file loads, it will call loadedAudio()
-    // the file will be kept by the browser as cache
-    audio.addEventListener('canplaythrough', loadedAudio, false);
-    audio.src = url;
-}
+    var state = {};
+    var aliveTimestamp = 0;
+    var aliveTimeout = 0;
+    var loaded = 0;
 
-function loadedAudio() {
-    // this will be called every time an audio file is loaded
-    // we keep track of the loaded files vs the requested files
-    loaded++;
-    console.log(loaded + " audio files loaded!");
-    if (loaded == audioFiles.length) {
-        // all have loaded
-        main();
+
+    this.init = function () {
+
+        _this.uuid = uuidv4();
+        initConnection();
+        initMusicLines();
+
+        setInterval(_ => {
+            UpdateState();
+            Alive();
+        }, 1000)
     }
-}
 
-_.map(audio => preloadAudio(audio));
+    function initConnection() {
+        _this.connection = new signalR.HubConnectionBuilder().withUrl("/controlhub").build();
+        _this.connection.on("UpdateState", function (stateFromServer) {
+            state = stateFromServer;
+            UpdateState();
+        });
 
-function main() {
+        _this.connection.on("CurrentTime", function (time) {
+            //state.currentTrackTime = time;
+            if (currentMusic) {
+                currentMusic.currentTime = time;
+            }
+        });
 
-}
-connection.on("UpdateState", function (stateFromServer) {
-    state = stateFromServer;
-    UpdateState();
-});
+        _this.connection.on("DiffTime", function (diff) {
+            aliveTimeout = new Date().getTime() - aliveTimestamp;
+            console.log("Timeout", aliveTimeout);
+            console.log(diff);
+            if (currentMusic && Math.abs(diff) > 0.2) {
+                currentMusic.currentTime = currentMusic.currentTime + diff;
+            }
+        });
 
-connection.on("CurrentTime", function (time) {
-    //state.currentTrackTime = time;
-    if (currentMusic) {
-        currentMusic.currentTime = time;
+        _this.connection.start().then(function () {
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
     }
-});
 
+    function initMusicLines() {
+        _this.audioFiles.forEach(item => {
+            let musicElement = $(`<audio data-id="${item.id}" > <source src="${item.path}" type="audio/mp3"></audio>`).addClass('music-element');
+            musicElement.on({
+                loadeddata: function () {
+                    console.log("Duration", musicElement[0].duration);
+                },
+                timeupdate: function () {
+                    setCurrentTime(item.id, musicElement[0]);
+                },
+                ended: function () {
+                    stopMusic(id);
+                    _this.currentMusic.currentTime = 0;
+                }
+            });
 
-connection.on("DiffTime", function (diff) {
-    aliveTimeout = new Date().getTime() - aliveTimestamp;
-    console.log("Timeout", aliveTimeout);
-    console.log(diff);
-    if (currentMusic && Math.abs(diff) > 1) {
-        currentMusic.currentTime = currentMusic.currentTime + diff;
+            let label = $(`<label>${item.name}</label>`);
+            let currentTime = $(`<div id="current_time_${item.id}"></div>`);
+            let playBtn = $(`<span id="play_${item.id}"><i class="material-icons">play_arrow</i></span>`).addClass('play-btn');
+            $(playBtn).click(function () {
+                handlePlay(musicElement);
+            });
+
+            let musicBox = $("<div></div>").addClass("music-box").append(musicElement, label, currentTime, playBtn);
+            $(".music-list").append(musicBox);
+        });
     }
-});
 
 
-connection.start().then(function () {
-}).catch(function (err) {
-    return console.error(err.toString());
-});
 
-
-function handlePlay(num) {
-    var music = musicLines[num];
-    var elem = document.getElementById("play_" + num);
-    if (elem.dataset.disabled === "true")
-    {
-        return;
+    function preloadAudio(url) {
+        var audio = new Audio();
+        // once this file loads, it will call loadedAudio()
+        // the file will be kept by the browser as cache
+        audio.addEventListener('canplaythrough', loadedAudio, false);
+        audio.src = url;
     }
-    if (music.paused) {
-        playMusic(num);
-    } else {
-        stopMusic(num);
+
+    function loadedAudio() {
+        // this will be called every time an audio file is loaded
+        // we keep track of the loaded files vs the requested files
+        loaded++;
+        console.log(loaded + " audio files loaded!");
+        if (loaded == audioFiles.length) {
+            // all have loaded
+            main();
+        }
     }
-}
 
-function stopMusic(num) {
-    var music = musicLines[num];
-    var playBtn = playBtns[num];
-    music.pause();
-    playBtn.classList.remove('pause');
-    playBtn.innerHTML = '<i class="material-icons">play_arrow</i>';
-    StopLine();
-    currentMusic = null;
-    currentId = null;
-}
+    _.map(audio => preloadAudio(audio));
 
-function playMusic(num) {
-    if (currentId !== null) {
-        stopMusic(currentId);
+    function main() {
+
     }
-    var music = musicLines[num];
-    var playBtn = playBtns[num];
-    music.play();
-    playBtn.classList.add('pause');
-    playBtn.innerHTML = '<i class="material-icons">pause</i>';
-    StartLine(num);
-    currentMusic = music;
-    currentId = num;
-}
-
-function StartLine(num) {
-    connection.invoke("StartLine", uuid, num).catch(function (err) {
-        return console.error(err.toString());
-    });
-}
-
-function StopLine() {
-    connection.invoke("StopLine", uuid).catch(function (err) {
-        return console.error(err.toString());
-    });
-}
 
 
-function UpdateState() {
-    stateBox.innerHTML = "<code>" + JSON.stringify(state) + "</code>";
-    _.map(playBtns, btn => {
-        var id = parseInt(btn.id.substr("play_".length));
-        
-        if (id !== currentId) {
-            if (state.aliveLines && state.aliveLines.length) {
-                var line = state.aliveLines.find(p => p.lineNum === id);
-                if (line) {
-                    blockPlay(btn, true);
-                }else {
+    handlePlay = function (music) {
+        var id = music.data("id");
+        console.log(id);
+        if ($("#play_" + id).disabled) {
+            return;
+        }
+        if (music[0].paused) {
+            playMusic(music);
+        } else {
+            stopMusic(music);
+        }
+    }
+
+    function stopMusic(music) {
+        var id = music.data("id");
+        var playBtn = $("#play_" + id);
+        music[0].pause();
+        playBtn.removeClass('pause');
+        playBtn.html(`<i class="material-icons">play_arrow</i>`);
+        StopLine();
+        currentMusic = null;
+        currentId = null;
+    }
+
+    function playMusic(music) {
+        console.log("PLAY");
+        if (currentId !== null) {
+            stopMusic(currentMusic);
+        }
+        var id = music.data("id");
+        var playBtn = $("#play_" + id);
+        music[0].play();
+        playBtn.addClass('pause');
+        playBtn.html('<i class="material-icons">pause</i>');
+        StartLine(id);
+        currentMusic = music[0];
+        currentId = parseInt(id);
+    }
+
+    function StartLine(id) {
+        _this.connection.invoke("StartLine", _this.uuid, id).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
+
+    function StopLine() {
+        _this.connection.invoke("StopLine", _this.uuid).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
+
+
+    function UpdateState() {
+        $("#state").html(`<code>${JSON.stringify(state)}</code>`);
+        $('.play-btn').each(function () {
+            var btn = this;
+            let id = parseInt($(btn).attr('id').substr("play_".length));
+            if (id !== currentId) {
+                if (state.aliveLines && state.aliveLines.length) {
+                    var line = state.aliveLines.find(p => p.lineNum === id);
+                    if (line) {
+                        blockPlay(btn, true);
+                    } else {
+                        blockPlay(btn, false);
+                    }
+                } else {
                     blockPlay(btn, false);
                 }
-            } else {
-                blockPlay(btn, false);
             }
+        })
+    }
+
+    function blockPlay(elem, isBlock) {
+        $(elem).disabled = isBlock;
+        if (isBlock) {
+            $(elem).addClass('disabled');
+        } else {
+            $(elem).removeClass('disabled');
         }
-    })
-}
-
-function blockPlay(elem, isBlock) {
-    if (isBlock) {
-        elem.dataset.disabled = "true";
-        elem.classList.add('disabled');
-    } else {
-        elem.dataset.disabled = "false";
-        elem.classList.remove('disabled');
     }
-}
 
-function Alive() {
-    aliveTimestamp = new Date().getTime();
+    function Alive() {
+        let aliveTimestamp = new Date().getTime();
 
-    var currentTime = 0;
-    if (currentMusic != null) {
-        currentTime = currentMusic.currentTime;
+        var currentTime = 0;
+        if (currentMusic != null) {
+            currentTime = currentMusic.currentTime;
+        }
+        _this.connection.invoke("Alive", _this.uuid, currentTime).catch(function (err) {
+            return console.error(err.toString());
+        });
     }
-    connection.invoke("Alive", uuid, currentTime).catch(function (err) {
-        return console.error(err.toString());
-    });
-}
 
-function setCurrentTime(num, music) {
-    var currentTime = currentTimes[num];
-   currentTime.innerHTML = music.currentTime;
-}
-
-setInterval(_ => {
-    UpdateState();
-    Alive();
-}, 1000)
-
-_.map(musicLines, music => {
-    var id = parseInt(music.id);
-    music.onloadeddata = function () {
-        console.log("Duration", music.duration);
+    function setCurrentTime(id, music) {
+        var currentTime = $("#current_time_" + id);
+        currentTime.html(music.currentTime);
     }
-    music.ontimeupdate = function () {
-       setCurrentTime(id, music);
-    };
 
-    music.addEventListener('timeupdate', function () {
-       setCurrentTime(id, music);
-    }, false);
 
-    music.addEventListener('ended', function () {
-        stopMusic(id);
-        currentMusic.currentTime = 0;
-    });
-})
+    function uuidv4() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
 
-function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
+
+
 }
 
-
-//// volume
-var volBox = document.querySelector('.volume-box')
-var volumeRange = document.querySelector('.volume-range')
-var volumeDown = document.querySelector('.volume-down')
-var volumeUp = document.querySelector('.volume-up')
-
-volumeDown.addEventListener('click', handleVolumeDown);
-volumeUp.addEventListener('click', handleVolumeUp);
-
-function handleVolumeDown() {
-    volumeRange.value = Number(volumeRange.value) - 20
-    currentMusic.volume = volumeRange.value / 100
-}
-function handleVolumeUp() {
-    volumeRange.value = Number(volumeRange.value) + 20
-    currentMusic.volume = volumeRange.value / 100
-}
+var index = null;
+$(_ => {
+    index = new Index();
+    index.init();
+});

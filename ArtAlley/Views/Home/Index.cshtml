@@ -13,76 +13,15 @@
 </head>
 <body>
 
-    <div class="player">
+    <div id="player" class="player">
         <div class="cover">
             <img src="/files/autumn.jpg" alt="">
         </div>
-        <div id="state" style="display:none;">
+        <div id="state">
 
         </div>
         <div class="music-list">
-            <div class="music-box">
-                <audio class="music-element" id="0">
-                    <source src="/files/01.mp3" type="audio/mp3">
-                </audio>
-                <label>
-                    01
-                </label>
-                <div class="current-time"></div>
-                <span class="play-btn" id="play_0" data-disabled="false" onclick="handlePlay(0)">
-                    <i class="material-icons">play_arrow</i>
-                </span>
-            </div>
-            <div class="music-box">
-                <audio class="music-element" id="1">
-                    <source src="/files/02.mp3" type="audio/mp3">
-                </audio>
-                <label>
-                    02
-                </label>
-                <div class="current-time"></div>
-                <span class="play-btn" id="play_1" onclick="handlePlay(1)">
-                    <i class="material-icons">play_arrow</i>
-                </span>
-            </div>
-            <div class="music-box">
-                <audio class="music-element" id="2">
-                    <source src="/files/03.mp3" type="audio/mp3">
-                </audio>
-                <label>
-                    03
-                </label>
-                <div class="current-time"></div>
-                <span class="play-btn" id="play_2" onclick="handlePlay(2)">
-                    <i class="material-icons">play_arrow</i>
-                </span>
-            </div>
-
-            <div class="music-box">
-                <audio class="music-element" id="3">
-                    <source src="/files/04.mp3" type="audio/mp3">
-                </audio>
-                <label>
-                    04
-                </label>
-                <div class="current-time"></div>
-                <span class="play-btn" id="play_3" onclick="handlePlay(3)">
-                    <i class="material-icons">play_arrow</i>
-                </span>
-            </div>
-
-            <div class="music-box">
-                <audio class="music-element" id="4">
-                    <source src="/files/05.mp3" type="audio/mp3">
-                </audio>
-                <label>
-                    05
-                </label>
-                <div class="current-time"></div>
-                <span class="play-btn" id="play_4" onclick="handlePlay(4)">
-                    <i class="material-icons">play_arrow</i>
-                </span>
-            </div>
+            
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
