@@ -9,7 +9,7 @@ var musicLines = document.getElementsByClassName('music-element');
 var playBtns = document.getElementsByClassName('play-btn');
 var currentTimes = document.getElementsByClassName('current-time');
 var stateBox = document.getElementById("state");
-
+var player = document.getElementById('player');
 var currentMusic = null;
 var currentId = null;
 var uuid = uuidv4();
@@ -17,6 +17,7 @@ var uuid = uuidv4();
 var state = {};
 var aliveTimestamp = 0;
 var aliveTimeout = 0;
+var loaded = 0;
 
 var audioFiles = [
     "/files/01.mp3",
@@ -38,9 +39,22 @@ function preloadAudio(url) {
     audio.src = url;
 }
 
+function loadedAudio() {
+    // this will be called every time an audio file is loaded
+    // we keep track of the loaded files vs the requested files
+    loaded++;
+    console.log(loaded + " audio files loaded!");
+    if (loaded == audioFiles.length) {
+        // all have loaded
+        main();
+    }
+}
+
 _.map(audio => preloadAudio(audio));
 
+function main() {
 
+}
 connection.on("UpdateState", function (stateFromServer) {
     state = stateFromServer;
     UpdateState();
