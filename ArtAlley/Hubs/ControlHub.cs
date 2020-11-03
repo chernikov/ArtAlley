@@ -37,6 +37,7 @@ namespace ArtAlley.Hubs
         public async Task StopLine(Guid userId)
         {
             var state = State.getInstance();
+            state.ClearByTimeout();
             var currentLine = state.AliveLines.Find(p => p.userId == userId);
             if (currentLine != null)
             {

@@ -33,20 +33,25 @@ function Index() {
     var currentId = null;
 
     var state = {};
-    var aliveTimestamp = 0;
-    var aliveTimeout = 0;
     var loaded = 0;
+    var downtimer = 5;
 
+    this.preloadAll = function() {
+        _this.audioFiles.forEach(music => {
+            preloadAudio(music.path);
+        });
+    }
 
     this.init = function () {
-
         _this.uuid = uuidv4();
         initConnection();
         initMusicLines();
-
+       
         setInterval(_ => {
             UpdateState();
-            Alive();
+            if (_this.connection.state === "Connected") {
+                Alive();
+            }
         }, 1000)
     }
 
@@ -68,12 +73,17 @@ function Index() {
             aliveTimeout = new Date().getTime() - aliveTimestamp;
             console.log("Timeout", aliveTimeout);
             console.log(diff);
-            if (currentMusic && Math.abs(diff) > 0.2) {
+            if (currentMusic && Math.abs(diff) > 0.2 && downtimer > 0) {
                 currentMusic.currentTime = currentMusic.currentTime + diff;
+                downtimer--;
+            } else {
+                downtimer = 5;
             }
         });
 
         _this.connection.start().then(function () {
+            
+            Alive();
         }).catch(function (err) {
             return console.error(err.toString());
         });
@@ -90,8 +100,15 @@ function Index() {
                     setCurrentTime(item.id, musicElement[0]);
                 },
                 ended: function () {
-                    stopMusic(id);
-                    _this.currentMusic.currentTime = 0;
+                    stopMusic(musicElement);
+                },
+                canplaythrough: function () {
+                    loaded++;
+                    console.log(loaded + " audio files loaded!");
+                    //if (loaded == _this.audioFiles.length) {
+                    //    // all have loaded
+                    //    _this.init();
+                    //}
                 }
             });
 
@@ -106,34 +123,6 @@ function Index() {
             $(".music-list").append(musicBox);
         });
     }
-
-
-
-    function preloadAudio(url) {
-        var audio = new Audio();
-        // once this file loads, it will call loadedAudio()
-        // the file will be kept by the browser as cache
-        audio.addEventListener('canplaythrough', loadedAudio, false);
-        audio.src = url;
-    }
-
-    function loadedAudio() {
-        // this will be called every time an audio file is loaded
-        // we keep track of the loaded files vs the requested files
-        loaded++;
-        console.log(loaded + " audio files loaded!");
-        if (loaded == audioFiles.length) {
-            // all have loaded
-            main();
-        }
-    }
-
-    _.map(audio => preloadAudio(audio));
-
-    function main() {
-
-    }
-
 
     handlePlay = function (music) {
         var id = music.data("id");
@@ -157,12 +146,13 @@ function Index() {
         StopLine();
         currentMusic = null;
         currentId = null;
+        downtimer = 5;
     }
 
     function playMusic(music) {
         console.log("PLAY");
         if (currentId !== null) {
-            stopMusic(currentMusic);
+            stopMusic($(currentMusic));
         }
         var id = music.data("id");
         var playBtn = $("#play_" + id);
@@ -217,8 +207,6 @@ function Index() {
     }
 
     function Alive() {
-        let aliveTimestamp = new Date().getTime();
-
         var currentTime = 0;
         if (currentMusic != null) {
             currentTime = currentMusic.currentTime;
