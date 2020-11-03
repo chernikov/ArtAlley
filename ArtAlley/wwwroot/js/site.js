@@ -15,18 +15,69 @@ function Index() {
             id: 1,
             name: "01",
             path: "/files/01.mp3",
-            time: 0
+            time: 0,
+            duration: 0,
+            voiceTime: 10
         },
         {
             id: 2,
             name: "02",
             path: "/files/02.mp3",
-            time: 0
+            time: 0,
+            duration: 0,
+            voiceTime: 12 
         }, {
             id: 3,
             name: "03",
             path: "/files/03.mp3",
-            time: 0
+            time: 0,
+            duration: 0,
+            voiceTime: 15
+        },
+        {
+            id: 4,
+            name: "04",
+            path: "/files/04.mp3",
+            time: 0,
+            duration: 0,
+            voiceTime: 12
+        }, {
+            id: 5,
+            name: "05",
+            path: "/files/05.mp3",
+            time: 0,
+            duration: 0,
+            voiceTime: 15
+        },
+        {
+            id: 6,
+            name: "06",
+            path: "/files/06.mp3",
+            time: 0,
+            duration: 0,
+            voiceTime: 12
+        }, {
+            id: 7,
+            name: "07",
+            path: "/files/07.mp3",
+            time: 0,
+            duration: 0,
+            voiceTime: 15
+        },
+        {
+            id: 8,
+            name: "08",
+            path: "/files/08.mp3",
+            time: 0,
+            duration: 0,
+            voiceTime: 12
+        }, {
+            id: 9,
+            name: "09",
+            path: "/files/09.mp3",
+            time: 0,
+            duration: 0,
+            voiceTime: 15
         }
     ];
     var currentMusic = null;
@@ -71,8 +122,6 @@ function Index() {
 
         _this.connection.on("DiffTime", function (diff) {
             aliveTimeout = new Date().getTime() - aliveTimestamp;
-            console.log("Timeout", aliveTimeout);
-            console.log(diff);
             if (currentMusic && Math.abs(diff) > 0.2 && downtimer > 0) {
                 currentMusic.currentTime = currentMusic.currentTime + diff;
                 downtimer--;
@@ -91,20 +140,24 @@ function Index() {
 
     function initMusicLines() {
         _this.audioFiles.forEach(item => {
+            let musicBox = $("<div></div>").addClass("music-box");
+
             let musicElement = $(`<audio data-id="${item.id}" > <source src="${item.path}" type="audio/mp3"></audio>`).addClass('music-element');
+            
             musicElement.on({
                 loadeddata: function () {
-                    console.log("Duration", musicElement[0].duration);
+                    item.duration = musicElement[0].duration;
+                    let voiceBlock = $("<div class='voice'></div>").css("width", `${(item.duration - item.voiceTime) * 100 / (item.duration)}%`);
+                    musicBox.append(voiceBlock);
                 },
                 timeupdate: function () {
-                    setCurrentTime(item.id, musicElement[0]);
+                    setCurrentTime(item, musicElement[0]);
                 },
                 ended: function () {
                     stopMusic(musicElement);
                 },
                 canplaythrough: function () {
                     loaded++;
-                    console.log(loaded + " audio files loaded!");
                     //if (loaded == _this.audioFiles.length) {
                     //    // all have loaded
                     //    _this.init();
@@ -113,20 +166,20 @@ function Index() {
             });
 
             let label = $(`<label>${item.name}</label>`);
-            let currentTime = $(`<div id="current_time_${item.id}"></div>`);
+            let progress = $(`<div class='progress' id="progress_${item.id}"></div>`);
+
             let playBtn = $(`<span id="play_${item.id}"><i class="material-icons">play_arrow</i></span>`).addClass('play-btn');
             $(playBtn).click(function () {
                 handlePlay(musicElement);
             });
 
-            let musicBox = $("<div></div>").addClass("music-box").append(musicElement, label, currentTime, playBtn);
+            musicBox.append(musicElement, label, playBtn, progress);
             $(".music-list").append(musicBox);
         });
     }
 
     handlePlay = function (music) {
         var id = music.data("id");
-        console.log(id);
         if ($("#play_" + id).disabled) {
             return;
         }
@@ -150,7 +203,6 @@ function Index() {
     }
 
     function playMusic(music) {
-        console.log("PLAY");
         if (currentId !== null) {
             stopMusic($(currentMusic));
         }
@@ -162,6 +214,7 @@ function Index() {
         StartLine(id);
         currentMusic = music[0];
         currentId = parseInt(id);
+        music.currentTime = 0;
     }
 
     function StartLine(id) {
@@ -216,9 +269,9 @@ function Index() {
         });
     }
 
-    function setCurrentTime(id, music) {
-        var currentTime = $("#current_time_" + id);
-        currentTime.html(music.currentTime);
+    function setCurrentTime(musicLine, music) {
+        var progress = $("#progress_" + musicLine.id);
+        progress.css("width", `${(music.currentTime / musicLine.duration)*100}%`);
     }
 
 

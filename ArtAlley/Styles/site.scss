@@ -3,7 +3,6 @@ body {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    height: 100%;
     background-color: #f5e0e5;
     background-image: linear-gradient(45deg, #ff9b9c 0%, #ffd4a7 100%);
     position: relative;
@@ -15,10 +14,6 @@ body {
 }
 
 .player {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
     width: 330px;
     border-radius: 15px;
     background-color: #fff6e7;
@@ -26,6 +21,9 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 20px auto;
 
     .cover {
         width: 150px;
@@ -34,6 +32,7 @@ body {
         overflow: hidden;
         margin-top: 50px;
         box-shadow: 0 5px 20px 0 #d56c006d;
+        margin-bottom: 30px;
 
         img {
             width: 100%;
@@ -77,24 +76,54 @@ body {
         width: 100%;
 
         .music-box {
-            margin-top: 20px;
             display: flex;
-            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            box-shadow: 0px 7px 10px rgba(0,0,0,.2);
 
             label {
                 flex-grow: 1;
-                margin-left: 10px;
-                line-height: 50px;
+                z-index: 5;
             }
 
+            .progress {
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                z-index: 3;
+                background-color: #FFD4A7;
+            }
+
+            .voice {
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                z-index: 2;
+                background-color: lightgray;
+            }
+
+
             .play-btn {
-                width: 50px;
-                height: 50px;
-                border-radius: 50px;
+                flex-shrink: 0;
+                margin-left: 20px;
                 background-color: #fff6e7;
                 cursor: pointer;
                 transition: all 0.4s;
                 color: #72646f;
+                z-index: 5;
+                width: 40px;
+                border-radius: 50%;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
 
                 i {
                     font-size: 36px;
@@ -111,6 +140,10 @@ body {
                         font-size: 32px;
                     }
                 }
+            }
+
+            &:last-child {
+                margin-bottom: 0;
             }
         }
     }
