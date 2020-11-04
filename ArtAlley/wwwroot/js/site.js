@@ -16,7 +16,6 @@ function Index() {
             name: "01",
             path: "/files/01.mp3",
             time: 0,
-            duration: 0,
             voiceTime: 10
         },
         {
@@ -24,14 +23,12 @@ function Index() {
             name: "02",
             path: "/files/02.mp3",
             time: 0,
-            duration: 0,
             voiceTime: 12 
         }, {
             id: 3,
             name: "03",
             path: "/files/03.mp3",
             time: 0,
-            duration: 0,
             voiceTime: 15
         },
         {
@@ -39,14 +36,12 @@ function Index() {
             name: "04",
             path: "/files/04.mp3",
             time: 0,
-            duration: 0,
             voiceTime: 12
         }, {
             id: 5,
             name: "05",
             path: "/files/05.mp3",
             time: 0,
-            duration: 0,
             voiceTime: 15
         },
         {
@@ -54,14 +49,12 @@ function Index() {
             name: "06",
             path: "/files/06.mp3",
             time: 0,
-            duration: 0,
             voiceTime: 12
         }, {
             id: 7,
             name: "07",
             path: "/files/07.mp3",
             time: 0,
-            duration: 0,
             voiceTime: 15
         },
         {
@@ -69,23 +62,23 @@ function Index() {
             name: "08",
             path: "/files/08.mp3",
             time: 0,
-            duration: 0,
             voiceTime: 12
         }, {
             id: 9,
             name: "09",
             path: "/files/09.mp3",
             time: 0,
-            duration: 0,
             voiceTime: 15
         }
     ];
+    var duration = 94;
     var currentMusic = null;
     var currentId = null;
 
     var state = {};
     var loaded = 0;
     var downtimer = 5;
+    var hash = null;
 
     this.preloadAll = function() {
         _this.audioFiles.forEach(music => {
@@ -140,21 +133,17 @@ function Index() {
 
     function initMusicLines() {
         _this.audioFiles.forEach(item => {
-            let musicBox = $("<div></div>").addClass("music-box");
-
             let musicElement = $(`<audio data-id="${item.id}" > <source src="${item.path}" type="audio/mp3"></audio>`).addClass('music-element');
-            
             musicElement.on({
                 loadeddata: function () {
-                    item.duration = musicElement[0].duration;
-                    let voiceBlock = $("<div class='voice'></div>").css("width", `${(item.duration - item.voiceTime) * 100 / (item.duration)}%`);
-                    musicBox.append(voiceBlock);
+                    console.log("audio is loaded");
                 },
                 timeupdate: function () {
                     setCurrentTime(item, musicElement[0]);
                 },
                 ended: function () {
                     stopMusic(musicElement);
+                    setCurrentTime(item, musicElement[0]);
                 },
                 canplaythrough: function () {
                     loaded++;
@@ -167,20 +156,22 @@ function Index() {
 
             let label = $(`<label>${item.name}</label>`);
             let progress = $(`<div class='progress' id="progress_${item.id}"></div>`);
+            let voiceBlock = $("<div class='voice'></div>").css("width", `${(duration - item.voiceTime) * 100 / (duration)}%`);
 
             let playBtn = $(`<span id="play_${item.id}"><i class="material-icons">play_arrow</i></span>`).addClass('play-btn');
             $(playBtn).click(function () {
                 handlePlay(musicElement);
             });
 
-            musicBox.append(musicElement, label, playBtn, progress);
+            let musicBox = $("<div></div>").addClass("music-box");
+            musicBox.append(musicElement, label, playBtn, progress, voiceBlock);
             $(".music-list").append(musicBox);
         });
     }
 
     handlePlay = function (music) {
         var id = music.data("id");
-        if ($("#play_" + id).disabled) {
+        if ($("#play_" + id).data("disabled")) {
             return;
         }
         if (music[0].paused) {
@@ -204,7 +195,7 @@ function Index() {
 
     function playMusic(music) {
         if (currentId !== null) {
-            stopMusic($(currentMusic));
+            return;
         }
         var id = music.data("id");
         var playBtn = $("#play_" + id);
@@ -214,7 +205,6 @@ function Index() {
         StartLine(id);
         currentMusic = music[0];
         currentId = parseInt(id);
-        music.currentTime = 0;
     }
 
     function StartLine(id) {
@@ -231,7 +221,14 @@ function Index() {
 
 
     function UpdateState() {
+
+        var lines = _.map(state.aliveLines, p => p.userId);
+        var newHash = JSON.stringify(lines).split('').reduce((a, b) => { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
         $("#state").html(`<code>${JSON.stringify(state)}</code>`);
+        if (hash === newHash) {
+            return;
+        }
+        hash = newHash;
         $('.play-btn').each(function () {
             var btn = this;
             let id = parseInt($(btn).attr('id').substr("play_".length));
@@ -240,18 +237,27 @@ function Index() {
                     var line = state.aliveLines.find(p => p.lineNum === id);
                     if (line) {
                         blockPlay(btn, true);
+                        $(btn).addClass('pause');
+                        $(btn).html('<i class="material-icons">pause</i>');
                     } else {
                         blockPlay(btn, false);
+                        $(btn).removeClass('pause');
+                        $(btn).html('<i class="material-icons">play_arrow</i>');
                     }
                 } else {
                     blockPlay(btn, false);
+                    $(btn).removeClass('pause');
+                    $(btn).html('<i class="material-icons">play_arrow</i>');
                 }
+            }
+            if (currentId && currentId !== id) {
+                blockPlay(btn, true);
             }
         })
     }
 
     function blockPlay(elem, isBlock) {
-        $(elem).disabled = isBlock;
+        $(elem).data('disabled', isBlock);
         if (isBlock) {
             $(elem).addClass('disabled');
         } else {
@@ -271,7 +277,11 @@ function Index() {
 
     function setCurrentTime(musicLine, music) {
         var progress = $("#progress_" + musicLine.id);
-        progress.css("width", `${(music.currentTime / musicLine.duration)*100}%`);
+        if (!currentMusic) {
+            progress.css("width", '0');
+            return;
+        }
+        progress.css("width", `${(music.currentTime / duration) * 100}%`);
     }
 
 

@@ -1,4 +1,8 @@
-﻿html,
+﻿html {
+    height: 100vh;
+}
+
+html,
 body {
     padding: 0;
     margin: 0;
@@ -130,6 +134,7 @@ body {
                 }
 
                 &.disabled {
+                    cursor: default;
                     i {
                         color: #c0bdbf;
                     }

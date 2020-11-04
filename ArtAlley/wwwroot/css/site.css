@@ -1,3 +1,6 @@
+html {
+  height: 100vh; }
+
 html,
 body {
   padding: 0;
@@ -100,8 +103,10 @@ body {
         justify-content: center; }
         .player .music-list .music-box .play-btn i {
           font-size: 36px; }
-        .player .music-list .music-box .play-btn.disabled i {
-          color: #c0bdbf; }
+        .player .music-list .music-box .play-btn.disabled {
+          cursor: default; }
+          .player .music-list .music-box .play-btn.disabled i {
+            color: #c0bdbf; }
         .player .music-list .music-box .play-btn.pause i {
           font-size: 32px; }
       .player .music-list .music-box:last-child {
