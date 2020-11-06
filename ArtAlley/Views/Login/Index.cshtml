@@ -1,0 +1,38 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model LoginModel 
+@{
+    
+}
+
+
+<h1>Вхід</h1>
+<br/>
+@using (Html.BeginForm("Index", "Login", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label" for="Email">
+                Логін
+            </label>
+            <div class="controls">
+                @Html.TextBox("Login", Model.Login)
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="FirstName">
+                Password
+            </label>
+            <div class="controls">
+                @Html.ValidationMessage("Password")
+                @Html.Password("Password", Model.Password)
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                Ввійти
+            </button>
+        </div>
+    </fieldset>
+}
