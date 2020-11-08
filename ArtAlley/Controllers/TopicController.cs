@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ArtAlley.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,12 @@ namespace ArtAlley.Controllers
     [Route("/admin/topic")]
     public class TopicController : Controller
     {
+
         public IActionResult Index()
         {
-            return View();
+            var list = new List<TopicModel>();
+            //TODO:
+            return View(list);
         }
 
         [HttpGet("{id:int}")]

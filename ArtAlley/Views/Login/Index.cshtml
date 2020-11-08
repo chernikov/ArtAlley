@@ -3,10 +3,7 @@
 *@
 @model LoginModel 
 @{
-    
 }
-
-
 <h1>Вхід</h1>
 <br/>
 @using (Html.BeginForm("Index", "Login", FormMethod.Post, new { @class = "form-horizontal" }))
@@ -29,7 +26,8 @@
                 @Html.Password("Password", Model.Password)
             </div>
         </div>
-        <div class="form-actions">
+        
+        <div class="form-actions mt-5">
             <button type="submit" class="btn btn-primary">
                 Ввійти
             </button>

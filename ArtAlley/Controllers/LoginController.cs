@@ -41,7 +41,7 @@ namespace ArtAlley.Controllers
             if (entity != null)
             {
                 await AuthenticateAsync(entity);
-                return Redirect("/");
+                return RedirectToAction("Index", "Admin");
             }
             return View(model);
         }
