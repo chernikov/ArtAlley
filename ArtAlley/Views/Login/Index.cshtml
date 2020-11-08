@@ -1,11 +1,11 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model LoginModel 
+@model LoginModel
 @{
 }
 <h1>Вхід</h1>
-<br/>
+<br />
 @using (Html.BeginForm("Index", "Login", FormMethod.Post, new { @class = "form-horizontal" }))
 {
     <fieldset>
@@ -26,7 +26,7 @@
                 @Html.Password("Password", Model.Password)
             </div>
         </div>
-        
+
         <div class="form-actions mt-5">
             <button type="submit" class="btn btn-primary">
                 Ввійти

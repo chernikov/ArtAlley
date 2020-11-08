@@ -27,11 +27,16 @@
                 <td>@item.Title</td>
                 <td>
                     <a class="btn btn-primary" asp-area="" asp-controller="Topic" asp-action="Edit" asp-route-id="@item.Id">Редагувати</a>
-                    <a class="btn btn-primary" asp-area="" asp-controller="Topic" asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
+                    <div class="btn btn-primary deleteItem" data-id="@item.Id">Видалити</div>
                 </td>
             </tr>
 
         }
     </tbody>
 </table>
+@await Html.PartialAsync("_ConfirmModal")
 
+
+@section Scripts {
+    <script src="~/js/admin/topic/list.js" asp-append-version="true"></script>
+}

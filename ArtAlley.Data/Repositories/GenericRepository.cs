@@ -69,6 +69,7 @@ namespace ArtAlley.Data.Repositories
                 if (item != null)
                 {
                     _dbSet.Remove(item);
+                    context.SaveChanges();
                 }
             });
     }

@@ -69,10 +69,8 @@ namespace ArtAlley.Controllers
         [HttpGet("delete/{id:int}")]
         public IActionResult Delete(int id)
         {
-
-            return View("Index");
+            topicRepository.RemoveById(id);
+            return RedirectToAction("Index");
         }
-
-
     }
 }
