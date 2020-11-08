@@ -17,29 +17,43 @@ else
 @using (Html.BeginForm("Edit", "Topic", FormMethod.Post, new { @class = "form-horizontal" }))
 {
     @Html.Hidden("Id", Model.Id)
-<fieldset>
-    <div class="control-group">
-        <label class="control-label" for="Url">
-            Url
-        </label>
-        <div class="controls">
-            @Html.TextBox("Url", Model.Url)
+    @Html.Hidden("ImagePath", Model.ImagePath)
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label" for="Url">
+                Url
+            </label>
+            <div class="controls">
+                @Html.TextBox("Url", Model.Url)
+            </div>
         </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="Title">
-            Назва
-        </label>
-        <div class="controls">
-            @Html.TextBox("Title", Model.Title)
+        <div class="control-group">
+            <label class="control-label" for="Title">
+                Назва
+            </label>
+            <div class="controls">
+                @Html.TextBox("Title", Model.Title)
+            </div>
         </div>
-    </div>
-    <div class="form-actions mt-5">
-        <button type="submit" class="btn btn-primary">
-            @(Model.Id == 0 ? "Додати" : "Змінити")
-        </button>
 
-        <a class="btn btn-link" asp-area="" asp-controller="Topic" asp-action="Index">Скасувати</a>
-    </div>
-</fieldset>
+        <input type="file" class="d-none" id="imageUploader" />
+
+        <div class="btn btn-primary mt-5" id="uploadImageBtn">Завантажити зображення</div>
+
+        <div class="image">
+            <img id="PreviewImage" src="@Model.ImagePath" />
+        </div>
+        <div class="form-actions mt-5">
+            <button type="submit" class="btn btn-primary">
+                @(Model.Id == 0 ? "Додати" : "Змінити")
+            </button>
+            <a class="btn btn-link" asp-area="" asp-controller="Topic" asp-action="Index">Скасувати</a>
+        </div>
+    </fieldset>
 }
+@section Scripts {
+    <script src="/js/jqueryui/jquery-ui.min.js"></script>
+    <script src="/js/blueimp-file-upload/js/jquery.fileupload.min.js"></script>
+    <script src="/js/admin/topic/edit.js"></script>
+}
+ 

@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -60,6 +62,12 @@ namespace ArtAlley
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
+            app.UseStaticFiles(
+                 new StaticFileOptions
+                 {
+                     FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "static")),
+                     RequestPath = "/static"
+                 });
             app.UseRouting();
             app.UseAuthentication();   
             app.UseAuthorization();
@@ -110,3 +118,4 @@ namespace ArtAlley
         }
     }
 }
+

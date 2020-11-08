@@ -26,4 +26,8 @@
     <ProjectReference Include="..\ArtAlley.Data\ArtAlley.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="static\" />
+  </ItemGroup>
+
 </Project>
