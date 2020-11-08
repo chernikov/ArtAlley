@@ -16,6 +16,6 @@ namespace ArtAlley.Models
 
         public string ImagePath { get; set; }
 
-        public List<TopicFileModel> TopicFiles { get; set; }
+        public List<TopicFileModel> TopicFiles { get; set; } = new List<TopicFileModel>();
     }
 }
