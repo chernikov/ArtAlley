@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace ArtAlley.Controllers
 {
-    [Route("image")]
-    public class ImageController : Controller
+    [Route("file")]
+    public class FileController : Controller
     {
         private readonly string DirectoryPath = "static";
 
@@ -32,6 +32,7 @@ namespace ArtAlley.Controllers
             {
                 di.Create();
             }
+            var name = file.FileName;
             var fileExtension = Path.GetExtension(file.FileName);
             var fileName = Guid.NewGuid().ToString("N") + fileExtension;
             var fullPath = Path.Combine(DirectoryPath, fileName);
@@ -44,7 +45,7 @@ namespace ArtAlley.Controllers
                 inputStream.Seek(0, SeekOrigin.Begin);
                 inputStream.Read(array, 0, array.Length);
             }
-            var result = new { Path = $"/{DirectoryPath}/{fileName}" };
+            var result = new { Path = $"/{DirectoryPath}/{fileName}", Name = name };
             return Ok(result);
         }
     }

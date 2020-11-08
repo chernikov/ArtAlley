@@ -15,5 +15,7 @@ namespace ArtAlley.Models
         public string Title { get; set; }
 
         public string ImagePath { get; set; }
+
+        public List<TopicFileModel> TopicFiles { get; set; }
     }
 }

@@ -11,6 +11,10 @@ namespace ArtAlley.Data.Entities
     {
         public int Id { get; set; }
 
+        public int TopicId { get; set; }
+
+        public Topic Topic { get; set; }
+
         [MaxLength(100)]
         public string Name { get; set; }
 

@@ -14,7 +14,8 @@ namespace ArtAlley.Profiles
         public TopicProfile()
         {
             CreateMap<Topic, TopicModel>();
-            CreateMap<TopicModel, Topic>();
+            CreateMap<TopicModel, Topic>()
+                .ForMember(p => p.TopicFiles, opt => opt.Ignore());
         }
     }
 }

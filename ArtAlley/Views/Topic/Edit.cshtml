@@ -18,6 +18,10 @@ else
 {
     @Html.Hidden("Id", Model.Id)
     @Html.Hidden("ImagePath", Model.ImagePath)
+
+    <input type="file" class="d-none" accept="image/*" id="imageUploader" />
+    <input type="file" class="d-none" accept="audio/*" id="fileUploader" />
+
     <fieldset>
         <div class="control-group">
             <label class="control-label" for="Url">
@@ -36,12 +40,44 @@ else
             </div>
         </div>
 
-        <input type="file" class="d-none" id="imageUploader" />
+
 
         <div class="btn btn-primary mt-5" id="uploadImageBtn">Завантажити зображення</div>
 
         <div class="image">
             <img id="PreviewImage" src="@Model.ImagePath" />
+        </div>
+
+        <div class="">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Назва</th>
+                        <th scope="col">
+                            <div class="btn btn-primary" id="addFile">Додати файл</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="TopicFilesList">
+                    @{
+                        int index = 0;
+                    }
+                    @foreach (var item in Model.TopicFiles)
+                    {
+                        <tr id="TopicFilesWrapper@(index)">
+                            <td>
+                                @Html.Hidden("TopicFiles[" + index + "].Id", item.Id)
+                                @Html.Hidden("TopicFiles[" + index + "].Url", item.Url)
+                                @Html.TextBox("TopicFiles[" + index + "].Name", item.Name)
+                            </td>
+                            <td>
+                                <div class="btn btn-primary deleteItem">Видалити</div>
+                            </td>
+                        </tr>
+                        index++;
+                    }
+                </tbody>
+            </table>
         </div>
         <div class="form-actions mt-5">
             <button type="submit" class="btn btn-primary">
@@ -56,4 +92,3 @@ else
     <script src="/js/blueimp-file-upload/js/jquery.fileupload.min.js"></script>
     <script src="/js/admin/topic/edit.js"></script>
 }
- 

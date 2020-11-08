@@ -55,6 +55,7 @@ namespace ArtAlley.Controllers
         public IActionResult Edit(TopicModel model)
         {
             var entity = mapper.Map<Topic>(model);
+            var topicFiles = mapper.Map<List<TopicFile>>(model.TopicFiles);
             Topic newEntity;
             if (model.Id == 0) {
                 newEntity = topicRepository.Create(entity);
@@ -62,7 +63,8 @@ namespace ArtAlley.Controllers
             {
                 newEntity = topicRepository.Update(entity);
             }
-            var result = mapper.Map<TopicModel>(newEntity);
+            topicRepository.UpdateFiles(newEntity.Id, topicFiles);
+
             return RedirectToAction("Index");
         }
 
