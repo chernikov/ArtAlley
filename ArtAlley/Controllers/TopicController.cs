@@ -30,21 +30,46 @@ namespace ArtAlley.Controllers
             return View(result);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("add")]
+        public IActionResult Add()
+        {
+            var topicModel = new TopicModel();
+
+            return View("Edit", topicModel);
+        }
+
+        [HttpGet("edit/{id:int}")]
         public IActionResult Edit(int id)
         {
-            return View();
+            var entity = topicRepository.FindById(id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            var result = mapper.Map<TopicModel>(entity);
+            return View(result);
         }
 
         [HttpPost("edit")]
-        public IActionResult Edit()
+        [HttpPost("edit/{id:int}")]
+        public IActionResult Edit(TopicModel model)
         {
-            return View();
+            var entity = mapper.Map<Topic>(model);
+            Topic newEntity;
+            if (model.Id == 0) {
+                newEntity = topicRepository.Create(entity);
+            }else
+            {
+                newEntity = topicRepository.Update(entity);
+            }
+            var result = mapper.Map<TopicModel>(newEntity);
+            return RedirectToAction("Index");
         }
 
         [HttpGet("delete/{id:int}")]
         public IActionResult Delete(int id)
         {
+
             return View("Index");
         }
 

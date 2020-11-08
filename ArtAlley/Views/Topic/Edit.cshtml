@@ -1,9 +1,45 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model TopicModel
 @{
     Layout = "_Admin";
 }
+@if (Model.Id == 0)
+{
+    <h1>Додати</h1>
+}
+else
+{
+    <h1>Редагувати</h1>
+}
+<br />
+@using (Html.BeginForm("Edit", "Topic", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.Hidden("Id", Model.Id)
+<fieldset>
+    <div class="control-group">
+        <label class="control-label" for="Url">
+            Url
+        </label>
+        <div class="controls">
+            @Html.TextBox("Url", Model.Url)
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="Title">
+            Назва
+        </label>
+        <div class="controls">
+            @Html.TextBox("Title", Model.Title)
+        </div>
+    </div>
+    <div class="form-actions mt-5">
+        <button type="submit" class="btn btn-primary">
+            @(Model.Id == 0 ? "Додати" : "Змінити")
+        </button>
 
-
-Edit
+        <a class="btn btn-link" asp-area="" asp-controller="Topic" asp-action="Index">Скасувати</a>
+    </div>
+</fieldset>
+}
