@@ -1,8 +1,47 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model TopicModel
 @{
 }
 
-
-@ViewBag.Url
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="~/css/music.css" />
+</head>
+<body>
+    <div id="player" class="player">
+        <div class="title">@Model.Title</div>
+        <div class="cover">
+            <img src="@Model.ImagePath" alt="">
+        </div>
+        <div id="state" style="display: none;">
+        </div>
+        <div class="music-list">
+            @foreach (var item in Model.TopicFiles)
+            {
+                <div class="music-box">
+                    <audio data-id="@item.Id" class="music-element">
+                        <source src="@item.Url" type="audio/mp3">
+                    </audio>
+                    <label>@item.Name</label>
+                    <span id="play_@item.Id" class="play-btn">
+                        <i class="material-icons">play_arrow</i>
+                    </span>
+                    <div class="progress" id="progress_@item.Id"></div>
+                </div>
+            }
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
+    <script src="~/js/jquery/jquery.js"></script>
+    <script src="~/js/page.js" asp-append-version="true"></script>
+</body>
+</html>

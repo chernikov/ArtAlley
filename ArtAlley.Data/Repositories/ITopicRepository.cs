@@ -10,5 +10,7 @@ namespace ArtAlley.Data.Repositories
     public interface ITopicRepository : IGenericRepository<Topic>, IBaseRepository
     {
         void UpdateFiles(int id, List<TopicFile> topicFiles);
+
+        Topic FindByUrl(string url);
     }
 }

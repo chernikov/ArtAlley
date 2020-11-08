@@ -46,7 +46,7 @@
             dataType: 'json',
             add: function (e, data) {
                 var uploadErrors = [];
-                if (data.originalFiles[0]['size'].length && data.originalFiles[0]['size'] > 15000000) {
+                if (data.originalFiles[0]['size'].length && data.originalFiles[0]['size'] > 50000000) {
                     uploadErrors.push('Filesize is too big');
                 }
                 if (uploadErrors.length > 0) {

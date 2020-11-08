@@ -19,6 +19,12 @@ namespace ArtAlley.Data.Repositories
                                 .Include(p => p.TopicFiles)
                                 .FirstOrDefault(p => p.Id == id));
 
+        public Topic FindByUrl(string url)
+             => Execute(context => context.Topics
+                                .Include(p => p.TopicFiles)
+                                .FirstOrDefault(p => p.Url == url));
+
+
         public void UpdateFiles(int id, List<TopicFile> topicFiles)
             => Execute(context =>
             {
