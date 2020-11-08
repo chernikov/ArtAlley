@@ -1,0 +1,40 @@
+version: '3'
+services:
+  sql1:
+    container_name : sql1 
+    image : mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
+    ports : 
+      - "1433:1433"
+    networks:
+      - "artalley"
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: MyStrongPassword!
+    volumes:
+      - mssqlsystem:/var/opt/mssql
+      - mssqluser:/var/opt/sqlserver
+    restart : always
+  server: 
+    container_name : server
+    image: chernikov/artalley
+    ports:
+      - "80:80"
+    volumes:
+      - "~/artalley:/app/static"
+    networks:
+      - "artalley"
+    depends_on:
+      - sql1
+    restart : always
+networks: 
+  artalley: 
+    driver: bridge
+    ipam: 
+      config:
+        - subnet: 10.0.0.1/24
+        
+volumes: 
+  mssqlsystem:
+    external: true 
+  mssqluser:
+    external: true

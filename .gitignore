@@ -7,3 +7,4 @@ node_modules/
 bin/
 obj/
 /ArtAlley/static
+/ArtAlley/.build/out
