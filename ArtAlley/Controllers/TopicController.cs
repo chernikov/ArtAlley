@@ -1,4 +1,7 @@
-﻿using ArtAlley.Models;
+﻿using ArtAlley.Data.Entities;
+using ArtAlley.Data.Repositories;
+using ArtAlley.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,12 +14,20 @@ namespace ArtAlley.Controllers
     [Route("/admin/topic")]
     public class TopicController : Controller
     {
+        private readonly ITopicRepository topicRepository;
+        private readonly IMapper mapper;
+
+        public TopicController(ITopicRepository topicRepository, IMapper mapper)
+        {
+            this.topicRepository = topicRepository;
+            this.mapper = mapper;
+        }
 
         public IActionResult Index()
         {
-            var list = new List<TopicModel>();
-            //TODO:
-            return View(list);
+            var list = topicRepository.Get();
+            var result = mapper.Map<IEnumerable<Topic>, IList<TopicModel>>(list);
+            return View(result);
         }
 
         [HttpGet("{id:int}")]
