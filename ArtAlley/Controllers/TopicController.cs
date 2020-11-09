@@ -73,6 +73,11 @@ namespace ArtAlley.Controllers
         [HttpGet("delete/{id:int}")]
         public IActionResult Delete(int id)
         {
+            var topicFiles = topicFileRepository.Get().Where(p => p.TopicId == id);
+            foreach (var file in topicFiles)
+            {
+                topicFileRepository.RemoveById(file.Id);
+            }
             topicRepository.RemoveById(id);
             return RedirectToAction("Index");
         }
