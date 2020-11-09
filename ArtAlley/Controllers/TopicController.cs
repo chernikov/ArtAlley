@@ -16,11 +16,13 @@ namespace ArtAlley.Controllers
     {
         private readonly ITopicRepository topicRepository;
         private readonly IMapper mapper;
+        private readonly ITopicFileRepository topicFileRepository;
 
-        public TopicController(ITopicRepository topicRepository, IMapper mapper)
+        public TopicController(ITopicRepository topicRepository, IMapper mapper, ITopicFileRepository topicFileRepository)
         {
             this.topicRepository = topicRepository;
             this.mapper = mapper;
+            this.topicFileRepository = topicFileRepository;
         }
 
         public IActionResult Index()
@@ -63,7 +65,7 @@ namespace ArtAlley.Controllers
             {
                 newEntity = topicRepository.Update(entity);
             }
-            topicRepository.UpdateFiles(newEntity.Id, topicFiles);
+            topicFileRepository.UpdateFiles(newEntity.Id, topicFiles);
 
             return RedirectToAction("Index");
         }

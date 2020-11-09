@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace ArtAlley.Data.Repositories
 {
-    public interface ITopicRepository : IGenericRepository<Topic>, IBaseRepository
+    public interface ITopicFileRepository : IGenericRepository<TopicFile>, IBaseRepository
     {
-        Topic FindByUrl(string url);
+        void UpdateFiles(int id, List<TopicFile> topicFiles);
     }
 }

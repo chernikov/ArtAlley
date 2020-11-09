@@ -23,30 +23,5 @@ namespace ArtAlley.Data.Repositories
              => Execute(context => context.Topics
                                 .Include(p => p.TopicFiles)
                                 .FirstOrDefault(p => p.Url == url));
-
-
-        public void UpdateFiles(int id, List<TopicFile> topicFiles)
-            => Execute(context =>
-            {
-                var existItems = context.TopicFiles.Where(p => p.TopicId == id).ToList();
-
-                var changedItems = existItems.Where(p => topicFiles.Any(tf => tf.Id == p.Id)).ToList();
-                var forDelete = existItems.Where(p => !topicFiles.Any(tf => tf.Id == p.Id)).ToList();
-                var newItems = topicFiles.Where(p => p.Id == 0);
-                context.TopicFiles.RemoveRange(forDelete);
-                
-                foreach(var item in newItems)
-                {
-                    item.TopicId = id;
-                    context.TopicFiles.Add(item);
-                }
-
-                foreach(var item in changedItems)
-                {
-                    var incomeItem = topicFiles.FirstOrDefault(p => p.Id == item.Id);
-                    item.Name = incomeItem.Name;
-                }
-                context.SaveChanges();
-            });
     }
 }
