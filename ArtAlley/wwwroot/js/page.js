@@ -13,6 +13,14 @@ function Page() {
     this.init = function () {
         $(".play-btn").on("click", function () {
             var music = $(this).siblings("audio");
+            music.on({
+                loadeddata: function () {
+                    console.log("audio is loaded");
+                },
+                timeupdate: function () {                 
+                    updateTimeline(this);
+                }
+            });
             handlePlay(music);
         });
     }
@@ -50,6 +58,12 @@ function Page() {
         playBtn.html('<i class="material-icons">pause</i>');
         currentMusic = music;
         currentId = parseInt(id);
+    }
+
+    updateTimeline = function (music) {
+        let duration = $(music)[0].duration;
+        let currentTime = $(music)[0].currentTime;
+        $(music).siblings('.progress').css('width', (currentTime * 100 / duration) + '%');
     }
 }
 
