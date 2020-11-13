@@ -73,8 +73,9 @@
         $("<input/>").attr("type", "hidden").attr("name", "TopicFiles[" + total + "].Id").attr("id", "TopicFiles[" + total + "]_Id").appendTo(field);
         $("<input/>").attr("type", "hidden").attr("name", "TopicFiles[" + total + "].Url").attr("id", "TopicFiles[" + total + "]_Url").val(url).appendTo(field);
         $("<input/>").attr("type", "text").attr("name", "TopicFiles[" + total + "].Name").attr("id", "TopicFiles[" + total + "]_Name").val(name).appendTo(field);
-        var field2 = $("<td/>").appendTo(row);
-        var button = $(`<div class="btn btn-primary deleteItem">Видалити</div>`).appendTo(field2);
+        $("<td>0</td>").appendTo(row);
+        var field3 = $("<td/>").appendTo(row);
+        var button = $(`<div class="btn btn-primary deleteItem">Видалити</div>`).appendTo(field3);
         button.click(removeFile);
     }
 

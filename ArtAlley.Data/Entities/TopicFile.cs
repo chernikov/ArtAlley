@@ -21,6 +21,6 @@ namespace ArtAlley.Data.Entities
         [MaxLength(150)]
         public string FilePath { get; set; }
 
-        //public int CountOfPlaying { get; set; }
+        public int CountOfPlaying { get; set; }
     }
 }

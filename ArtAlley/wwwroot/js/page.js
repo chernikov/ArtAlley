@@ -54,6 +54,9 @@ function Page() {
         var id = music.data("id");
         var playBtn = $("#play_" + id);
         music[0].play();
+        $.get("/api/play/" + id, function (data) {
+            console.log("Logged", id);
+        });
         playBtn.addClass('pause');
         playBtn.html('<i class="material-icons">pause</i>');
         currentMusic = music;
