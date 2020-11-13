@@ -24,7 +24,13 @@ body {
   align-items: center;
   padding: 20px;
   box-sizing: border-box;
-  margin: 20px auto; }
+  margin: 20px auto;
+  position: relative; }
+  .player .info {
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 20px; }
   .player .cover {
     width: 150px;
     height: 150px;

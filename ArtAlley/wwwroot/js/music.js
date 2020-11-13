@@ -292,8 +292,9 @@ function Index() {
         });
     }
 
-
-
+    $("#infoBtn").on("click", function () {
+        $('#infoModal').modal('show');
+    })
 }
 
 var index = null;

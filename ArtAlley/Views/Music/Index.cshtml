@@ -1,5 +1,5 @@
-﻿@{ 
-    Layout = null; 
+﻿@{
+    Layout = null;
 }
 <!DOCTYPE html>
 <html>
@@ -10,9 +10,13 @@
     <title>Music Player</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="~/css/music.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 </head>
 <body>
     <div id="player" class="player">
+        <span class="material-icons info" id="infoBtn">
+            info
+        </span>
         <div class="cover">
             <img src="/files/autumn.jpg" alt="">
         </div>
@@ -24,6 +28,14 @@
     <script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
     <script src="~/js/jquery/jquery.js"></script>
+    <script src="~/js/jqueryui/jquery-ui.min.js"></script>
     <script src="~/js/music.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+@await Html.PartialAsync("_InfoModal")
+
+@section Scripts {
+    <script src="~/js/infoModal.js"></script>
+}
