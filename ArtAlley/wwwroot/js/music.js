@@ -13,62 +13,82 @@ function Index() {
     this.audioFiles = [
         {
             id: 1,
-            name: "01",
+            name: "ALTO 1",
             path: "/files/01.mp3",
             time: 0,
-            voiceTime: 10
+            voiceTime: 5
         },
         {
             id: 2,
-            name: "02",
+            name: "ALTO 2",
             path: "/files/02.mp3",
             time: 0,
-            voiceTime: 12 
+            voiceTime: 5 
         }, {
             id: 3,
-            name: "03",
+            name: "ALTO 3",
             path: "/files/03.mp3",
             time: 0,
-            voiceTime: 15
+            voiceTime: 5
         },
         {
             id: 4,
-            name: "04",
+            name: "BASS 1",
             path: "/files/04.mp3",
             time: 0,
-            voiceTime: 12
+            voiceTime: 16
         }, {
             id: 5,
-            name: "05",
+            name: "BASS 2",
             path: "/files/05.mp3",
             time: 0,
-            voiceTime: 15
+            voiceTime: 16
         },
         {
             id: 6,
-            name: "06",
+            name: "BASS 3",
             path: "/files/06.mp3",
             time: 0,
-            voiceTime: 12
+            voiceTime: 16
         }, {
             id: 7,
-            name: "07",
+            name: "SOPRANO 1",
             path: "/files/07.mp3",
             time: 0,
-            voiceTime: 15
+            voiceTime: 1
         },
         {
             id: 8,
-            name: "08",
+            name: "SOPRANO 2",
             path: "/files/08.mp3",
             time: 0,
-            voiceTime: 12
+            voiceTime: 1
         }, {
             id: 9,
-            name: "09",
+            name: "SOPRANO 3",
             path: "/files/09.mp3",
             time: 0,
-            voiceTime: 15
+            voiceTime: 1
+        },
+        {
+            id: 10,
+            name: "TENOR 1",
+            path: "/files/10.mp3",
+            time: 0,
+            voiceTime: 11
+        },
+        {
+            id: 11,
+            name: "TENOR 2",
+            path: "/files/11.mp3",
+            time: 0,
+            voiceTime: 11
+        }, {
+            id: 12,
+            name: "TENOR 3",
+            path: "/files/12.mp3",
+            time: 0,
+            voiceTime: 11
         }
     ];
     var duration = 94;

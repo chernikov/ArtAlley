@@ -13,5 +13,7 @@ namespace ArtAlley.Models
         public string Name { get; set; }
 
         public string Url { get; set; }
+
+        //public int CountOfPlaying { get; set; }
     }
 }
