@@ -23,17 +23,15 @@ namespace ArtAlley.Controllers
             this.mapper = mapper;
         }
 
-        [Authorize]
         public IActionResult Index()
         {
             var entity = topicRepository.Get();
-            if(entity == null)
+            if (entity == null)
             {
                 return NotFound();
             }
             var model = mapper.Map<IEnumerable<Topic>, List<TopicModel>>(entity);
             return View(model);
         }
-        // остальные методы
     }
 }
