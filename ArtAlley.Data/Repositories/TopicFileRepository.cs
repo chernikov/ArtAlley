@@ -13,6 +13,14 @@ namespace ArtAlley.Data.Repositories
         {
         }
 
+        public void Increase(int id)
+            => Execute(context =>
+            {
+                var exists = context.TopicFiles.FirstOrDefault(p => p.Id == id);
+                exists.CountOfPlaying++;
+                context.SaveChanges();
+            });
+
         public void UpdateFiles(int id, List<TopicFile> topicFiles)
             => Execute(context =>
             {

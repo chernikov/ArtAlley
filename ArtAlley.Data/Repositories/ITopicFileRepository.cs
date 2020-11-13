@@ -10,5 +10,6 @@ namespace ArtAlley.Data.Repositories
     public interface ITopicFileRepository : IGenericRepository<TopicFile>, IBaseRepository
     {
         void UpdateFiles(int id, List<TopicFile> topicFiles);
+        void Increase(int id);
     }
 }

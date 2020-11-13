@@ -53,6 +53,7 @@ else
                 <thead>
                     <tr>
                         <th scope="col">Назва</th>
+                        <th scope="col">Прослухано</th>
                         <th scope="col">
                             <div class="btn btn-primary" id="addFile">Додати файл</div>
                         </th>
@@ -64,16 +65,19 @@ else
                     }
                     @foreach (var item in Model.TopicFiles)
                     {
-                        <tr id="TopicFilesWrapper@(index)">
-                            <td>
-                                @Html.Hidden("TopicFiles[" + index + "].Id", item.Id)
-                                @Html.Hidden("TopicFiles[" + index + "].Url", item.Url)
-                                @Html.TextBox("TopicFiles[" + index + "].Name", item.Name)
-                            </td>
-                            <td>
-                                <div class="btn btn-primary deleteItem">Видалити</div>
-                            </td>
-                        </tr>
+                    <tr id="TopicFilesWrapper@(index)">
+                        <td>
+                            @Html.Hidden("TopicFiles[" + index + "].Id", item.Id)
+                            @Html.Hidden("TopicFiles[" + index + "].Url", item.Url)
+                            @Html.TextBox("TopicFiles[" + index + "].Name", item.Name)
+                        </td>
+                        <td>
+                            @item.CountOfPlaying
+                        </td>
+                        <td>
+                            <div class="btn btn-primary deleteItem">Видалити</div>
+                        </td>
+                    </tr>
                         index++;
                     }
                 </tbody>
