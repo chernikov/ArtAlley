@@ -12,45 +12,6 @@ function Index() {
 
     this.audioFiles = [
         {
-            id: 1,
-            name: "ALTO 1",
-            path: "/files/01.mp3",
-            time: 0,
-            voiceTime: 5
-        },
-        {
-            id: 2,
-            name: "ALTO 2",
-            path: "/files/02.mp3",
-            time: 0,
-            voiceTime: 5 
-        }, {
-            id: 3,
-            name: "ALTO 3",
-            path: "/files/03.mp3",
-            time: 0,
-            voiceTime: 5
-        },
-        {
-            id: 4,
-            name: "BASS 1",
-            path: "/files/04.mp3",
-            time: 0,
-            voiceTime: 16
-        }, {
-            id: 5,
-            name: "BASS 2",
-            path: "/files/05.mp3",
-            time: 0,
-            voiceTime: 16
-        },
-        {
-            id: 6,
-            name: "BASS 3",
-            path: "/files/06.mp3",
-            time: 0,
-            voiceTime: 16
-        }, {
             id: 7,
             name: "SOPRANO 1",
             path: "/files/07.mp3",
@@ -71,6 +32,26 @@ function Index() {
             voiceTime: 1
         },
         {
+            id: 1,
+            name: "ALTO 1",
+            path: "/files/01.mp3",
+            time: 0,
+            voiceTime: 5
+        },
+        {
+            id: 2,
+            name: "ALTO 2",
+            path: "/files/02.mp3",
+            time: 0,
+            voiceTime: 5 
+        }, {
+            id: 3,
+            name: "ALTO 3",
+            path: "/files/03.mp3",
+            time: 0,
+            voiceTime: 5
+        },
+        {
             id: 10,
             name: "TENOR 1",
             path: "/files/10.mp3",
@@ -89,6 +70,26 @@ function Index() {
             path: "/files/12.mp3",
             time: 0,
             voiceTime: 11
+        },
+        {
+            id: 4,
+            name: "BASS 1",
+            path: "/files/04.mp3",
+            time: 0,
+            voiceTime: 16
+        }, {
+            id: 5,
+            name: "BASS 2",
+            path: "/files/05.mp3",
+            time: 0,
+            voiceTime: 16
+        },
+        {
+            id: 6,
+            name: "BASS 3",
+            path: "/files/06.mp3",
+            time: 0,
+            voiceTime: 16
         }
     ];
     var duration = 94;
